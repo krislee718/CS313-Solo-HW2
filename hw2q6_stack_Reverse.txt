@@ -1,0 +1,48 @@
+#include <iostream>
+#include <string>
+#include <stack>
+#include <fstream>
+
+using namespace std;
+
+class ReverseStr {// class to reverse a passed in string
+
+public:
+    void reverse(string & str, int num) {//this function takes a string array and uses stack functions to add and remove elements
+        stack<char> stk;
+        for (int i = 0; i < num; i++) {
+            stk.push(str[i]);//inserts element
+        }
+        int k = 0;
+        while (!stk.empty()) {
+            str[k++] = stk.top();//assigns next element
+            stk.pop();//removes top element---->the string was inserted first-in order but the removal happens on the top-outer element
+        }
+    }
+
+};
+
+
+int main(){
+
+    ReverseStr r1;
+
+    ofstream myfile;
+    myfile.open("jokes.txt");//creates a file and save below text
+    myfile << "If Chuck Norris were to travel to an alternate dimension in which there was another Chuck Norris and they both fought, they would both win..";
+
+    myfile.close();
+       
+    ifstream myfile1("jokes.txt");//reads the text file
+    string line;
+
+    if (myfile1.is_open()) {
+        while (myfile1>> line) {
+            r1.reverse(line, line.length());
+            cout<< line<< " ";
+        }
+        myfile.close();
+    }
+
+    return 0;
+}

@@ -1,0 +1,84 @@
+#include <iostream>
+#include <time.h>
+#include <iomanip> 
+using namespace std;
+
+template <class T> class Queue {
+
+private:
+	T* data;
+	int front, rear, capacity, pos;
+public:
+	Queue(int SIZE = 10) {
+		if (SIZE < 0) throw "Size Error";
+		data = new T[SIZE];
+		pos = front = rear = 0;
+		capacity = SIZE;
+	}//constructor
+
+	~Queue() {
+		delete[] data;
+	}//deconstructor
+
+	bool empty() {
+		return front == rear;
+	}//check if the queue is empty
+
+	void enqueue(const T& d) {
+		if (capacity == rear) throw "Queue is full";
+		data[rear++] = d;
+		//cout << rear << endl;
+		int yourChoice = yourOrder();
+		pos = rear - yourChoice;
+		if (pos < 1) pos = 1;
+		cout << "\n------------------------------------" << endl;
+		cout << "Your order is " << pos << "th out of " << rear << " order(s)." << endl;
+		cout << "------------------------------------" << endl;
+	}//add an element to the queue, use the function for taking order to calculate its priority position
+
+	void dequeue() {
+		if (empty()) throw "Queue is empty";
+		for (int i = 0; i < rear - 1; i++) {
+			data[i] = data[i + 1];
+		}
+		rear--;
+	}//delete an element
+
+
+	int yourOrder() {
+		int choice = 0;
+
+		for (int i = 0; i < 6; i++) {
+			cout << "\nYou're placing " << 6 << " orders, please select your priority (this is your #" << i + 1 << " input): " << endl;
+			cout << "0 - It is a Regular order " << endl;
+			cout << "1 - It is a Express order " << endl;
+			cout << "2 - It is a Bulk order" << endl;
+			cout << "3 - It is a Friends and Family order \n" << endl;
+			cin >> choice;
+			while (choice > 3 || choice < 0) {
+				cout << "Wrong value, re-enter: " << endl;
+				cin >> choice;
+			}
+			return choice;
+		}
+	}
+
+};//prompt the user to select a priority option, return the choice
+
+int main() {
+
+	time_t start, end;
+	time(&start);
+	ios_base::sync_with_stdio(false);
+
+	Queue <int> Q(6);//create 6 orders
+	for (int i = 0; i < 6; i++)
+		Q.enqueue(i);
+
+	time(&end);
+	double time_taken = double(end - start);
+	cout << "Time taken by program is : " << fixed
+		<< time_taken << setprecision(5);
+	cout << " sec " << endl;//time and print it
+	return 0;
+}
